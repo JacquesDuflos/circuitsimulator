@@ -14,11 +14,20 @@ var grid_elements : Array[GridElement]
 ## Will be used temporally before grid_graphs is funcional
 var grid_nodes : Array[GridNode]
 
+## The sum of error rectified when calculating the intensity in the circuit
+## durtin one iteration. It is reset at zero at begining of each iteration.
+## If it is beneth threashold_i, the solver will consider the calculus
+## converged (for intensity).
 var error_i : float
+## The sum of error rectified when calculating the electric tension in the circuit
+## durtin one iteration. It is reset at zero at begining of each iteration.
+## If it is beneth threashold_u, the solver will consider the calculus
+## converged (for electric tension).
 var error_u : float
 
 ## If set to True, the i and u values will be recalculage
-## on the next frame. It will be set to false immediatly.
+## on the next _on_trigger_to_converge_timeout.
+## It will be set to false immediatly.
 var marked_to_converge : bool = false
 ## Number of loop that will be done before giving up on converging
 const MAX_LOOP = 500
@@ -86,6 +95,8 @@ func update_to_converge():
 		graph.update_to_converge(MAX_LOOP, threashold_i, threashold_u)
 
 
+## Triggered when cables form the CableManager change. Should be deprecated
+## to make the CircuitSimulator a stand-alone pluggin
 func _on_layout_changed():
 	#return
 	scan_circuit()
@@ -100,8 +111,8 @@ func _on_trigger_converge_timeout() -> void:
 
 #region les fonction suivantes sont crees par chatgpt
 # https://chatgpt.com/c/6843627d-9308-8013-b720-820491a00a30
+## Check if any element is in commun between two arrays
 func has_any(set1: Array, set2: Array) -> bool:
-	## Check if any element is in commun between two arrays
 	for item in set1:
 		if set2.has(item):
 			return true
