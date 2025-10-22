@@ -6,7 +6,7 @@ class_name GridNode
 
 ## La lista de designaciones de bornes que son conectados por cables
 ## y que compoene este gridnode
-@export var borns : Array[Node] #Borne]
+@export var borns : Array[CnxPoint]
 
 ## El potencial electrico a cual se encuentra el nodo
 var u : float

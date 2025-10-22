@@ -132,8 +132,9 @@ func update_element_potencials():
 
 ## Loop through nodes to average their u value
 func update_node_potencials():
+	# TODO : move that to the node script
 	for grid_node in grid_nodes:
-		var old_u = grid_node.u
+		var old_u := grid_node.u
 		grid_node.u = 0
 		for b in grid_node.borns:
 			grid_node.u += b.u
@@ -155,24 +156,25 @@ func update_element_intencities():
 
 ## Loop through nodes to offset their intensity so they sum to zero
 func update_node_intencities():
+	# TODO : move that to the node script
 	for grid_node in grid_nodes:
 		var i_offset := 0.0
 		for b in grid_node.borns:
 			i_offset += b.i
 		#print("offset i : ", i_offset)
 		error_i += abs(i_offset)
-		var i_offset_individual = i_offset / grid_node.borns.size()
+		var i_offset_individual := i_offset / grid_node.borns.size()
 		for b in grid_node.borns:
 			b.i -= i_offset_individual * dumping
 			#print ("born ", b.name, "intencity : ", b.i)
 
 
-## Loop through all graph components to offset the u values according
+## Loop through all graph nodes to offset the u values according
 ## to the grounded node
 func offset_u_to_ground():
 	if grid_nodes.has(grounded_node):
-		var u_offset = grounded_node.u
+		var u_offset := grounded_node.u
 		for nod: GridNode in grid_nodes:
 			nod.u -= u_offset
-			for born: Borne in nod.borns:
+			for born: CnxPoint in nod.borns:
 				born.u -= u_offset

@@ -1,3 +1,4 @@
+@abstract
 class_name GridElement extends Node
 ## An abstract class that represent an element that can be
 ## part of the electric grid.
@@ -6,12 +7,12 @@ class_name GridElement extends Node
 ## The i property of this borne is usually negative when used
 ## with a current generator,
 ## and positive when used with a current consumer.
-@export var born1 :Node #: Borne
+@export var born1 :CnxPoint
 ## The second connexion point, usually black
 ## The i property of this borne is usually positive when used
 ## with a current generator,
 ## and negative when used with a current consumer.
-@export var born2 :Node #: Borne
+@export var born2 :CnxPoint
 ## The dumping factor to help making converge the values
 @export var dumping : float = 1.0
 
@@ -74,8 +75,7 @@ func update_i(dumping_override : float = 0.0):
 ## and negative otherwise.
 ## It generally means it is positive for current consumer and
 ## negative for current generator.
-func calculate_new_i() -> float:
-	return 0.0
+@abstract func calculate_new_i() -> float
 
 
 ## Calculates the potensial diferencial according to the
@@ -104,19 +104,18 @@ func update_u(dumping_override : float = 0.0):
 
 ## Calculate the new difference of potencial between borne1 and borne2
 ## It is positive if borne1 has higher potencial than borne2 (recommended)
-func calculate_new_u() -> float :
-	return born1.u - born2.u
+@abstract func calculate_new_u() -> float #:
+	#return born1.u - born2.u
 
 
-## Will be executed once when the graph converged to a specific value
-func on_converge():
-	pass
+## Will be executed once when the graph converged to a specific value. For
+## example it can be used to set a motor velocity.
+@abstract func on_converge()
 
 
 ## Will be executed if the graph does not converge, or if the
-## layout changes
-func interrupt():
-	pass
+## layout changes.
+@abstract func interrupt()
 
 ## Returns the current flowing through the component form born1
 ## to born2. Usually negative for current generators, and positive
